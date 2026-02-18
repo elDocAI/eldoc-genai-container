@@ -1,0 +1,108 @@
+#
+# elDoc GenAI Podman (Docker) Compose file
+# Make sure to place the .env file in the same directory as this compose.yaml file.
+#
+# How to use:
+# 1. Adjust the environment settings in the .env file.
+# 2. Ensure both files (.env and compose.yaml) are placed in the same directory.
+# 3. Execute the following commands:
+#
+#    Start:
+#    podman compose up -d
+#
+#    Stop:
+#    podman compose down
+#
+
+version: "3.9"
+
+volumes:
+  qdrant_data:
+  eldoc_data:
+  eldoc_conf:
+  eldoc_logs:
+
+services:
+  qdrant:
+    image: docker.io/qdrant/qdrant:latest
+    container_name: eldoc-qdrant
+    restart: unless-stopped
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - eldoc-net
+
+  eldoc:
+    image: localhost/eldoc:1.0.0
+    container_name: eldoc-aio
+    restart: unless-stopped
+    depends_on:
+      - qdrant
+    ports:
+      - "443:443" # expose only elDoc HTTPS to host
+    volumes:
+      - eldoc_data:/local/data
+      - eldoc_conf:/local/conf
+      - eldoc_logs:/local/logs
+    environment:
+      ELDOC_HOST: ${ELDOC_HOST}
+      ELDOC_AI: true # Enables elDoc AI features (RAG, AI tools, etc.)
+      ELDOC_AI_QDRANT_HOST: qdrant # Configuration for vector database (Qdrant)
+
+      # DO NOT EDIT LINES BELOW (edit them via .env file)
+      # ************************************************************
+      # AI & LLM Model Configuration – Chat
+      ELDOC_AI_CHAT_PROVIDER: ${ELDOC_AI_CHAT_PROVIDER}
+      ELDOC_AI_CHAT_SECRET: ${ELDOC_AI_CHAT_SECRET}
+      ELDOC_AI_CHAT_MODEL_ID: ${ELDOC_AI_CHAT_MODEL_ID}
+      ELDOC_AI_CHAT_TIMEOUT_SEC: ${ELDOC_AI_CHAT_TIMEOUT_SEC}
+      ELDOC_AI_CHAT_MAX_TOKENS_OUT: ${ELDOC_AI_CHAT_MAX_TOKENS_OUT}
+      ELDOC_AI_CHAT_BEDROCK_REGION: ${ELDOC_AI_CHAT_BEDROCK_REGION}
+      ELDOC_AI_CHAT_BEDROCK_KEY_ID: ${ELDOC_AI_CHAT_BEDROCK_KEY_ID}
+      ELDOC_AI_CHAT_OPENAI_ENDPOINT: ${ELDOC_AI_CHAT_OPENAI_ENDPOINT}
+      # AI & LLM Model Configuration – Agent
+      ELDOC_AI_AGENT_PROVIDER: ${ELDOC_AI_AGENT_PROVIDER}
+      ELDOC_AI_AGENT_SECRET: ${ELDOC_AI_AGENT_SECRET}
+      ELDOC_AI_AGENT_MODEL_ID: ${ELDOC_AI_AGENT_MODEL_ID}
+      ELDOC_AI_AGENT_TIMEOUT_SEC: ${ELDOC_AI_AGENT_TIMEOUT_SEC}
+      ELDOC_AI_AGENT_MAX_TOKENS_OUT: ${ELDOC_AI_AGENT_MAX_TOKENS_OUT}
+      ELDOC_AI_AGENT_BEDROCK_REGION: ${ELDOC_AI_AGENT_BEDROCK_REGION}
+      ELDOC_AI_AGENT_BEDROCK_KEY_ID: ${ELDOC_AI_AGENT_BEDROCK_KEY_ID}
+      ELDOC_AI_AGENT_OPENAI_ENDPOINT: ${ELDOC_AI_AGENT_OPENAI_ENDPOINT}
+      # AI & LLM Model Configuration – Vision-Language (VL) Model
+      ELDOC_AI_VL_PROVIDER: ${ELDOC_AI_VL_PROVIDER}
+      ELDOC_AI_VL_SECRET: ${ELDOC_AI_VL_SECRET}
+      ELDOC_AI_VL_MODEL_ID: ${ELDOC_AI_VL_MODEL_ID}
+      ELDOC_AI_VL_TIMEOUT_SEC: ${ELDOC_AI_VL_TIMEOUT_SEC}
+      ELDOC_AI_VL_MAX_TOKENS_OUT: ${ELDOC_AI_VL_MAX_TOKENS_OUT}
+      ELDOC_AI_VL_BEDROCK_REGION: ${ELDOC_AI_VL_BEDROCK_REGION}
+      ELDOC_AI_VL_BEDROCK_KEY_ID: ${ELDOC_AI_VL_BEDROCK_KEY_ID}
+      ELDOC_AI_VL_OPENAI_ENDPOINT: ${ELDOC_AI_VL_OPENAI_ENDPOINT}
+      # AI & LLM Model Configuration – Embeddings
+      # IMPORTANT: Settings for Embeddings model must match settings defined in JMC-config
+      ELDOC_AI_EMBED_PROVIDER: ${ELDOC_AI_EMBED_PROVIDER}
+      ELDOC_AI_EMBED_SECRET: ${ELDOC_AI_EMBED_SECRET}
+      ELDOC_AI_EMBED_MODEL_ID: ${ELDOC_AI_EMBED_MODEL_ID}
+      ELDOC_AI_EMBED_MODEL_PATH: ${ELDOC_AI_EMBED_MODEL_PATH}
+      ELDOC_AI_EMBED_MODEL_DIMS: ${ELDOC_AI_EMBED_MODEL_DIMS}
+      ELDOC_AI_EMBED_TIMEOUT_SEC: ${ELDOC_AI_EMBED_TIMEOUT_SEC}
+      ELDOC_AI_EMBED_BEDROCK_REGION: ${ELDOC_AI_EMBED_BEDROCK_REGION}
+      ELDOC_AI_EMBED_BEDROCK_KEY_ID: ${ELDOC_AI_EMBED_BEDROCK_KEY_ID}
+      ELDOC_AI_EMBED_OPENAI_ENDPOINT: ${ELDOC_AI_EMBED_OPENAI_ENDPOINT}
+      # AI & LLM Model Configuration – Reranking
+      ELDOC_AI_RERANK_PROVIDER: ${ELDOC_AI_RERANK_PROVIDER}
+      ELDOC_AI_RERANK_SECRET: ${ELDOC_AI_RERANK_SECRET}
+      ELDOC_AI_RERANK_MODEL_ID: ${ELDOC_AI_RERANK_MODEL_ID}
+      ELDOC_AI_RERANK_TIMEOUT_SEC: ${ELDOC_AI_RERANK_TIMEOUT_SEC}
+      ELDOC_AI_RERANK_MODEL_PATH: ${ELDOC_AI_RERANK_MODEL_PATH}
+      ELDOC_AI_RERANK_BEDROCK_REGION: ${ELDOC_AI_RERANK_BEDROCK_REGION}
+      ELDOC_AI_RERANK_BEDROCK_KEY_ID: ${ELDOC_AI_RERANK_BEDROCK_KEY_ID}
+      ELDOC_AI_RERANK_OPENAI_ENDPOINT: ${ELDOC_AI_RERANK_OPENAI_ENDPOINT}
+      # ************************************************************
+
+    networks:
+      - eldoc-net
+
+networks:
+  eldoc-net:
+    driver: bridge
