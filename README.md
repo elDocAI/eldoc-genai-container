@@ -4,6 +4,47 @@
 
 ---
 
+## 🚀 Quick Start (3 Steps)
+
+If you just want to get elDoc GenAI running:
+
+### 1️⃣ Download deployment files
+
+```bash
+git clone https://github.com/elDocAI/eldoc-genai-container.git
+cd eldoc-genai-container/compose
+```
+
+### 2️⃣ Configure environment
+
+Edit the `.env` file and set:
+
+* `ELDOC_HOST`
+* AI provider credentials
+* Required model configuration
+
+### 3️⃣ Start containers
+
+```bash
+podman compose up -d
+```
+
+or
+
+```bash
+docker compose up -d
+```
+
+elDoc will be available at:
+
+```
+https://<ELDOC_HOST>
+```
+
+For detailed configuration and production guidance, continue reading below.
+
+---
+
 ## 1. Introduction
 
 This document describes how to deploy **elDoc with GenAI capabilities** using **Podman Compose** or **Docker Compose**.
@@ -16,7 +57,6 @@ It covers:
 * Environment configuration via `.env`
 
 For general elDoc container information (TLS configuration, base setup, system requirements, reverse proxy, licensing, etc.), refer to:
-
 [https://docs.eldoc.online/latest/installation-guide/deployment-container](https://docs.eldoc.online/latest/installation-guide/deployment-container)
 
 ---
@@ -39,8 +79,10 @@ cd eldoc-genai-container-main/compose
 ```
 
 The `compose` directory contains:
+
 * `compose.yaml`
 * `.env`
+* Deployment documentation
 
 ---
 
