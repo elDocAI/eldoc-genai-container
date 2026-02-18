@@ -33,7 +33,7 @@ services:
       - eldoc-net
 
   eldoc:
-    image: localhost/eldoc:1.0.0
+    image: registry.eldoc.online/eldoc/eldoc-aio:latest
     container_name: eldoc-aio
     restart: unless-stopped
     depends_on:
