@@ -24,7 +24,7 @@ volumes:
 
 services:
   qdrant:
-    image: docker.io/qdrant/qdrant:latest
+    image: docker.io/qdrant/qdrant:v1.16.3
     container_name: eldoc-qdrant
     restart: unless-stopped
     volumes:
