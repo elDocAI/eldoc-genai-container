@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 Quick Start (3 Steps)
+## 🚀 Quick Start (4 Steps)
 
 If you just want to get elDoc GenAI running:
 
@@ -23,7 +23,15 @@ Edit the `.env` file and set:
 * AI provider credentials
 * Required model configuration
 
-### 3️⃣ Start containers
+### 3️⃣ Pull the elDoc AIO Image
+Execute the following commands (request USERNAME and PASSWORD from elDoc Support):
+```shell
+podman login registry.eldoc.online -u USERNAME
+podman pull registry.eldoc.online/eldoc/eldoc-aio:latest
+podman logout registry.eldoc.online
+```
+
+### 4️⃣ Start containers
 
 ```bash
 podman compose up -d
@@ -41,7 +49,9 @@ elDoc will be available at:
 https://<ELDOC_HOST>
 ```
 
-For detailed configuration and production guidance, continue reading below.
+---
+
+*For detailed configuration and production guidance, continue reading below.*
 
 ---
 
@@ -187,9 +197,19 @@ No additional configuration is required for the default setup.
 
 ## 10. Starting the Deployment
 
-From the directory containing both files:
+**Prerequisite**: Pull the elDoc AIO Image
 
-### Detached mode
+Execute the following commands using `podman` or `docker` (request USERNAME and PASSWORD from elDoc Support):
+
+```shell
+podman login registry.eldoc.online -u USERNAME
+podman pull registry.eldoc.online/eldoc/eldoc-aio:latest
+podman logout registry.eldoc.online
+```
+
+Execute in the directory containing both files:
+
+##### Start in detached mode
 
 ```bash
 podman compose up -d
@@ -201,7 +221,7 @@ or
 docker compose up -d
 ```
 
-### Foreground mode (for debugging)
+##### Start in foreground mode (for debugging)
 
 ```bash
 podman compose up
