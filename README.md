@@ -21,27 +21,24 @@ Edit the `.env` file and set:
 
 * `ELDOC_HOST`
 * AI provider credentials
-* Required model configuration
+* LLM models configuration
 
-### 3️⃣ Pull the elDoc AIO Image
-Execute the following commands (request USERNAME and PASSWORD from elDoc Support):
+### 3️⃣ Log in to the elDoc AIO image registry
+Execute the following command (request USERNAME and PASSWORD from elDoc Support):
 ```shell
 podman login registry.eldoc.online -u USERNAME
-podman pull registry.eldoc.online/eldoc/eldoc-aio:latest
-podman logout registry.eldoc.online
 ```
+
+or `docker login registry.eldoc.online -u USERNAME` if using Docker
 
 ### 4️⃣ Start containers
 
 ```bash
-podman compose up -d
+podman compose up
 ```
 
-or
+or `docker compose up` if using Docker. Add `-d` to launch containers in background.
 
-```bash
-docker compose up -d
-```
 
 elDoc will be available at:
 
@@ -51,9 +48,8 @@ https://<ELDOC_HOST>
 
 ---
 
-*For detailed configuration and production guidance, continue reading below.*
+> **For detailed configuration and production guidance, continue reading below.**
 
----
 
 ## 1. Introduction
 
