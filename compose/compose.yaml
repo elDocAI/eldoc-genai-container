@@ -24,26 +24,66 @@ volumes:
 
 services:
   qdrant:
-    image: docker.io/qdrant/qdrant:v1.16.3
+    image: docker.io/qdrant/qdrant:v1.17.1
     container_name: eldoc-qdrant
     restart: unless-stopped
     volumes:
       - qdrant_data:/qdrant/storage
     networks:
       - eldoc-net
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >
+          bash -ec '
+            exec 3<>/dev/tcp/127.0.0.1/6333
+            printf "GET /readyz HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n" >&3
+            IFS= read -r line <&3
+            echo "$$line" | grep -Eq "^HTTP/1\.[01] 200.*"
+          '
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  docling:
+    image: registry.eldoc.online/eldoc/eldoc-docling-cpu:v1.16.1
+    container_name: eldoc-docling
+    restart: unless-stopped
+    networks:
+      - eldoc-net
+    environment:
+      - HF_HUB_OFFLINE=1
+      - TRANSFORMERS_OFFLINE=1
+      - DOCLING_SERVE_LAYOUT_BATCH_SIZE=2
+      - DOCLING_SERVE_TABLE_BATCH_SIZE=2
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >
+          python -c "import sys,urllib.request;
+          r=urllib.request.urlopen('http://127.0.0.1:5001/health', timeout=3);
+          sys.exit(0 if r.status == 200 else 1)"
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
 
   eldoc:
     image: registry.eldoc.online/eldoc/eldoc-aio:latest
     container_name: eldoc-aio
     restart: unless-stopped
     depends_on:
-      - qdrant
+      docling:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
     ports:
       - "443:443" # expose only elDoc HTTPS to host
     volumes:
-      - eldoc_data:/local/data
-      - eldoc_conf:/local/conf
-      - eldoc_logs:/local/logs
+      - eldoc_data:/local/data:Z
+      - eldoc_conf:/local/conf:Z
+      - eldoc_logs:/local/logs:Z
     environment:
       ELDOC_HOST: ${ELDOC_HOST}
       ELDOC_AI: true # Enables elDoc AI features (RAG, AI tools, etc.)

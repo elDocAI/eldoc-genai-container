@@ -107,12 +107,13 @@ Both files must be located in the same directory.
 
 ### Services Created
 
-The Compose deployment starts two containers:
+The Compose deployment starts three containers:
 
-| Service  | Purpose                                              |
-| -------- | ---------------------------------------------------- |
-| `eldoc`  | elDoc AIO container with GenAI features enabled      |
-| `qdrant` | Internal vector database used for embeddings and RAG |
+| Service   | Purpose                                              |
+| --------- | ---------------------------------------------------- |
+| `eldoc`   | elDoc AIO container with GenAI features enabled      |
+| `qdrant`  | Internal vector database used for embeddings and RAG |
+| `docling` | Document processing for embeddings and RAG           |
 
 Only HTTPS (port 443) from the elDoc container is exposed to the host.
 
