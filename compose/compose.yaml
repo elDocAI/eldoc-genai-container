@@ -24,11 +24,12 @@ volumes:
 
 services:
   qdrant:
-    image: docker.io/qdrant/qdrant:v1.17.1
+    image: docker.io/qdrant/qdrant:v1.18.2
     container_name: eldoc-qdrant
+    hostname: qdrant
     restart: unless-stopped
     volumes:
-      - qdrant_data:/qdrant/storage
+      - qdrant_data:/qdrant/storage:Z
     networks:
       - eldoc-net
     healthcheck:
@@ -47,8 +48,9 @@ services:
       start_period: 20s
 
   docling:
-    image: registry.eldoc.online/eldoc/eldoc-docling-cpu:v1.16.1
+    image: registry.eldoc.online/eldoc/eldoc-docling-cpu:v1.26.0
     container_name: eldoc-docling
+    hostname: docling
     restart: unless-stopped
     networks:
       - eldoc-net
@@ -72,6 +74,7 @@ services:
   eldoc:
     image: registry.eldoc.online/eldoc/eldoc-aio:latest
     container_name: eldoc-aio
+    hostname: eldoc
     restart: unless-stopped
     depends_on:
       docling:
@@ -84,6 +87,8 @@ services:
       - eldoc_data:/local/data:Z
       - eldoc_conf:/local/conf:Z
       - eldoc_logs:/local/logs:Z
+    networks:
+      - eldoc-net      
     environment:
       ELDOC_HOST: ${ELDOC_HOST}
       ELDOC_AI: true # Enables elDoc AI features (RAG, AI tools, etc.)
@@ -139,9 +144,6 @@ services:
       ELDOC_AI_RERANK_BEDROCK_KEY_ID: ${ELDOC_AI_RERANK_BEDROCK_KEY_ID}
       ELDOC_AI_RERANK_OPENAI_ENDPOINT: ${ELDOC_AI_RERANK_OPENAI_ENDPOINT}
       # ************************************************************
-
-    networks:
-      - eldoc-net
 
 networks:
   eldoc-net:

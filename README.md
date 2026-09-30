@@ -2,7 +2,6 @@
 
 ## Container Deployment via Podman / Docker Compose
 
----
 
 ## 🚀 Quick Start (4 Steps)
 
@@ -50,6 +49,7 @@ https://<ELDOC_HOST>
 
 > **For detailed configuration and production guidance, continue reading below.**
 
+---
 
 ## 1. Introduction
 
@@ -63,7 +63,7 @@ It covers:
 * Environment configuration via `.env`
 
 For general elDoc container information (TLS configuration, base setup, system requirements, reverse proxy, licensing, etc.), refer to:
-[https://docs.eldoc.online/latest/installation-guide/deployment-container](https://docs.eldoc.online/latest/installation-guide/deployment-container)
+[https://docs.eldoc.ai/latest/installation-guide/deployment-container](https://docs.eldoc.ai/latest/installation-guide/deployment-container)
 
 ---
 
@@ -275,4 +275,4 @@ podman logs eldoc-qdrant
 
 ## 14. Additional Documentation
 
-For further details, refer to: [https://docs.eldoc.online/latest/installation-guide/deployment-container](https://docs.eldoc.online/latest/installation-guide/deployment-container)
+For further details, refer to: [https://docs.eldoc.ai/latest/installation-guide/deployment-container](https://docs.eldoc.ai/latest/installation-guide/deployment-container)
