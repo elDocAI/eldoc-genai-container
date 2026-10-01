@@ -48,7 +48,7 @@ services:
       start_period: 20s
 
   docling:
-    image: registry.eldoc.online/eldoc/eldoc-docling-cpu:v1.26.0
+    image: registry.eldoc.ai/eldoc/eldoc-docling-cpu:v1.26.0
     container_name: eldoc-docling
     hostname: docling
     restart: unless-stopped
@@ -72,7 +72,7 @@ services:
       start_period: 30s
 
   eldoc:
-    image: registry.eldoc.online/eldoc/eldoc-aio:latest
+    image: registry.eldoc.ai/eldoc/eldoc-aio:latest
     container_name: eldoc-aio
     hostname: eldoc
     restart: unless-stopped
@@ -88,7 +88,7 @@ services:
       - eldoc_conf:/local/conf:Z
       - eldoc_logs:/local/logs:Z
     networks:
-      - eldoc-net      
+      - eldoc-net
     environment:
       ELDOC_HOST: ${ELDOC_HOST}
       ELDOC_AI: true # Enables elDoc AI features (RAG, AI tools, etc.)

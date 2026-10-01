@@ -25,10 +25,10 @@ Edit the `.env` file and set:
 ### 3️⃣ Log in to the elDoc AIO image registry
 Execute the following command (request USERNAME and PASSWORD from elDoc Support):
 ```shell
-podman login registry.eldoc.online -u USERNAME
+podman login registry.eldoc.ai -u USERNAME
 ```
 
-or `docker login registry.eldoc.online -u USERNAME` if using Docker
+or `docker login registry.eldoc.ai -u USERNAME` if using Docker
 
 ### 4️⃣ Start containers
 
@@ -199,9 +199,9 @@ No additional configuration is required for the default setup.
 Execute the following commands using `podman` or `docker` (request USERNAME and PASSWORD from elDoc Support):
 
 ```shell
-podman login registry.eldoc.online -u USERNAME
-podman pull registry.eldoc.online/eldoc/eldoc-aio:latest
-podman logout registry.eldoc.online
+podman login registry.eldoc.ai -u USERNAME
+podman pull registry.eldoc.ai/eldoc/eldoc-aio:latest
+podman logout registry.eldoc.ai
 ```
 
 Execute in the directory containing both files:
@@ -276,3 +276,27 @@ podman logs eldoc-qdrant
 ## 14. Additional Documentation
 
 For further details, refer to: [https://docs.eldoc.ai/latest/installation-guide/deployment-container](https://docs.eldoc.ai/latest/installation-guide/deployment-container)
+
+---
+
+## 15. Using elDoc System
+
+Once your elDoc system is up and running, follow these steps to complete the initial setup:
+
+1. **Log in with the maintenance administrator account.** Sign in using the `maintAdmin` account. Its credentials are generated during the container's first launch, displayed in the console output, and saved in the container logs.
+
+2. **Create your first user account.** Navigate to `System Settings → Users` and [create a new user account](https://docs.eldoc.ai/latest/admin-guide/general-administration/). This account will serve as your primary administrator.
+
+3. **Create the Administrators group.** Navigate to `System Settings → Groups` and [create a new group](https://docs.eldoc.ai/latest/admin-guide/general-administration/groups) named `Administrators`. Assign the following roles to the group:
+   - `[elAdminSysRW]`
+   - `[elAdminDocsRW]`
+   - `[elAdminDocsD]`
+   - `[elAdminCrmRW]`
+
+   Add the user created in the previous step to this group.
+
+4. **Log in with your new administrator account.** Log out of the `maintAdmin` account and sign in with your newly created administrator account. You now have full administrative access to the system and can start exploring its capabilities.
+
+5. **Review the system configuration (recommended).** Navigate to `System Settings → Configuration` to review and adjust the [general system settings](https://docs.eldoc.ai/latest/admin-guide/general-administration/system-configuration) according to your environment and requirements.
+
+For more information about configuring and using elDoc, refer to the [Official elDoc Documentation](https://docs.eldoc.ai).
